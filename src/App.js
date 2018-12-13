@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.png';
+//import logo from './logo.png';
 import './App.css';
 import 'semantic-ui-css/semantic.min.css'
 
@@ -46,8 +46,8 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">AWS Amplify with AWS AppSync Sample using Complex Objects </h1>
+          {/* <img src={logo} className="App-logo" alt="logo" /> */}
+          <h1 className="App-title">AWS Amplify with AWS AppSync Sample using Complex Objects test</h1>
         </header>
         <div className="App-content">
           <AddPhoto options={{ bucket: S3_BUCKET_NAME, region: S3_BUCKET_REGION }} />
