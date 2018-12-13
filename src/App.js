@@ -41,7 +41,6 @@ const client = new AWSAppSyncClient({
 });
 
 class App extends Component {
-
   render() {
     return (
       <div className="App">
@@ -58,6 +57,36 @@ class App extends Component {
   }
 }
 
+//console.log(result);
+async function GetClientRoll(){
+
+  /* let result = await Auth.updateUserAttributes(user, {
+      'custom:user_roll': 'empresa'
+  });
+  console.log(result);  */
+  let result = await Auth.userAttributes(await Auth.currentAuthenticatedUser());
+
+  let data = '';
+  result.forEach(element => {
+    if (element.Name === 'custom:user_roll') {
+      data = element.Value;
+    }
+  });
+  return data;
+}
+/* GetClientRoll().then(function(value){
+  console.log(value);
+}); debugger; */
+let test = ''; //debugger;
+GetClientRoll().then(function (value) {
+  console.log(value)
+  
+  //this.test = value;
+});
+/* if (GetClientRoll() === 'empresa') {
+    console.log("data");
+} */
+console.log(test);
 const AppWithAuth = withAuthenticator(App, true);
 
 export default () => (
