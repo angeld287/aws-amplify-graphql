@@ -7,6 +7,11 @@ import { Form, Icon } from 'semantic-ui-react'
 
 import { Auth } from "aws-amplify";
 
+import awsconfig from '../aws-exports';
+
+const S3_BUCKET_REGION = awsconfig.aws_user_files_s3_bucket_region
+const S3_BUCKET_NAME = awsconfig.aws_user_files_s3_bucket
+
 class AddPhoto extends Component {
 
     constructor(props) {
@@ -36,7 +41,8 @@ class AddPhoto extends Component {
     async handleSubmit(e) {
         e.preventDefault();
 
-        const { bucket, region } = this.props.options;
+        const bucket = S3_BUCKET_NAME;
+        const region = S3_BUCKET_REGION;
         const visibility = 'private';
 
         const { name, file: selectedFile } = this.state;
