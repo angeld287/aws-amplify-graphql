@@ -41,52 +41,53 @@ const client = new AWSAppSyncClient({
 });
 
 class App extends Component {
+  state = {
+    username: '',
+    user_roll: ''
+  }
+  
+  componentDidMount() {
+    Auth.currentUserInfo()
+      .then(data => {
+        this.setState({
+          username: data.username
+        })
+      })
+      .catch(err => console.log('error: ', err))
+    
+    let result = async () => await Auth.userAttributes(await Auth.currentAuthenticatedUser());
+    result().then(
+      data => {
+        data.forEach(element => {
+          if (element.Name === 'custom:user_roll') {
+            this.setState({
+              user_roll: element.Value
+            })
+          }
+        });
+      });
+  }
+
   render() {
+    const esEmpresa = this.state.user_roll === 'empresa';
     return (
       <div className="App">
         <header className="App-header">
           {/* <img src={logo} className="App-logo" alt="logo" /> */}
+          <h1>Welcome {this.state.user_roll}</h1>
           <h1 className="App-title">AWS Amplify with AWS AppSync Sample using Complex Objects test</h1>
         </header>
         <div className="App-content">
-          <AddPhoto options={{ bucket: S3_BUCKET_NAME, region: S3_BUCKET_REGION }} />
-          <AllPhotos />
+          {esEmpresa && (
+            <AddPhoto options={{ bucket: S3_BUCKET_NAME, region: S3_BUCKET_REGION }} />
+          )}
+            <AllPhotos disabled = {true}/>
         </div>
       </div>
     );
   }
 }
 
-//console.log(result);
-async function GetClientRoll(){
-
-  /* let result = await Auth.updateUserAttributes(user, {
-      'custom:user_roll': 'empresa'
-  });
-  console.log(result);  */
-  let result = await Auth.userAttributes(await Auth.currentAuthenticatedUser());
-
-  let data = '';
-  result.forEach(element => {
-    if (element.Name === 'custom:user_roll') {
-      data = element.Value;
-    }
-  });
-  return data;
-}
-/* GetClientRoll().then(function(value){
-  console.log(value);
-}); debugger; */
-let test = ''; //debugger;
-GetClientRoll().then(function (value) {
-  console.log(value)
-  
-  //this.test = value;
-});
-/* if (GetClientRoll() === 'empresa') {
-    console.log("data");
-} */
-console.log(test);
 const AppWithAuth = withAuthenticator(App, true);
 
 export default () => (
@@ -96,3 +97,8 @@ export default () => (
     </Rehydrated>
   </ApolloProvider>
 );
+
+/* 
+  1. es necesario poder customizar la UI del login, signup y de la barra del menu.
+  2. se tiene que customizar el signup para que complete el campo "user_roll"
+*/
